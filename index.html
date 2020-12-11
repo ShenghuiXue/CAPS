@@ -1,0 +1,864 @@
+ 
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- inclue the head php here, including css library, jquerry lib, css style -->
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<title>CaPS: Calcium Pattern Search </title>
+	<meta charset='utf-8'> 
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<!-- include bootstrap and jquery -->
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'> 
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
+	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+	<!-- w3schools template -->
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+	<!-- font awesome-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+	<link rel="icon" type="image/png" href="../img/simpleLogo.png">
+	<style>
+	body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+	body {font-size:16px;}
+	.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+	.w3-half img:hover{opacity:1}
+	</style>
+	<style type="text/css">
+		body {
+			margin-left: 2.5%;
+			margin-right: 2.5%;
+			
+		}
+		.resultHeader {
+			color: rgb(0,0,256);
+			
+		}
+		.resultseq {
+			
+			
+			font-family: "Courier New","Lucida Console", Courier, monospace;
+			
+
+		}
+		.output_container{
+			margin-top:10px;
+			margin-bottom:10px;
+			padding:2%;
+			border-radius: 20px;
+			word-wrap: break-word;
+		}
+		#output_txt{
+			font-family: "Courier New","Lucida Console", Courier, monospace;
+		}
+		.Matg {
+			color:#F00;
+			font-weight: bold;
+		}
+		.terminationCodon {
+			color:#00F;
+			font-weight: bold;
+		}
+		.single_seq {
+			
+			border-color: #00F;
+			} 
+		.sequenceID {
+			color: #337ab7;
+			font-size:150%;
+			font-weight:bold;
+			} 
+		.patternID {
+			font-weight: bold;
+			border-radius:5px;
+			font-size:120%
+			padding-left:10px;
+			text-decoration: underline;
+		}
+		.frameID {
+			display:inline;
+			font-family: monospace;
+		}
+		.index_number {
+			display: inline-block;
+			width: 50px;
+
+		}
+		.seq_ID, .index_number, .sequence {
+			display:inline;
+		}
+		.seq_IDrev{
+			line-height: 50%;
+		}
+		table {
+		border-collapse: collapse;
+		text-align: center;
+		}
+
+		table, th, td {
+			border: 1px solid black;
+			padding:3px;
+
+			text-align: left;
+		}
+		td {
+			word-wrap: break-word;
+		}
+		.matchedSeq {
+			background-color: #bfff00;
+			font-weight: bold;
+			color:#ff4000;
+			border-radius:5px;
+		}
+		.blue {
+			color: #0080FF;
+		}
+		.input_container, .information_container, .foot{
+			padding:2%;
+			border-radius: 20px;
+		}
+		textarea, input {
+			color: #000;
+		}
+		a {
+			text-decoration: underline;
+		}
+		button {
+			margin: 5px;
+		}
+	</style>
+
+	
+</head>
+<body>
+	
+	<div class = "menu">
+		
+	</div>
+	<div class="w3-main" style="margin-left:40px;margin-right:40px">
+	<div class ="main_container">
+		<div class = "header w3-container" style="margin-top:80px" id="showcase">
+			<h1 class="w3-xxxlarge w3-text-red"><b>CaPS: Calcium Pattern Search</b></h1>
+			<hr style="width:50px;border:5px solid red" class="w3-round">
+		</div>
+		<div class = "input_container bg-primary">
+			<p>This program serarch for calcium binidng sites in <b>proteins</b>. Please input protein sequence here using <a href="https://en.wikipedia.org/wiki/FASTA_format"> <b>FASTA format</b> </a></p>
+			<textarea id="dnaseq" rows="5" class=" form-control">>parvalbumin
+MSMTDLLNAEDIKKAVGAFSATDSFDHKKFFQMVGLKKKSADDVKKVFHMLDKDKSGFIEEDELGFILKG
+FSPDARDLSAKETKMLMAAGDKDGDGKIGVDEFSTLVAES
+>S100G
+MSTKKSPEELKRIFEKYAAKEGDPDQLSKDELKLLIQAEFPSLLKGPNTLDDLFQELDKNGDGEVSFEEF
+QVLVKKISQ
+>albumin [Homo sapiens]
+MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAHRFKDLGEENFKALVLIAFAQYLQQCPFEDHVKLVNEV
+TEFAKTCVADESAENCDKSLHTLFGDKLCTVATLRETYGEMADCCAKQEPERNECFLQHKDDNPNLPRLV
+RPEVDVMCTAFHDNEETFLKKYLYEIARRHPYFYAPELLFFAKRYKAAFTECCQAADKAACLLPKLDELR
+DEGKASSAKQRLKCASLQKFGERAFKAWAVARLSQRFPKAEFAEVSKLVTDLTKVHTECCHGDLLECADD
+RADLAKYICENQDSISSKLKECCEKPLLEKSHCIAEVENDEMPADLPSLAADFVESKDVCKNYAEAKDVF
+LGMFLYEYARRHPDYSVVLLLRLAKTYETTLEKCCAAADPHECYAKVFDEFKPLVEEPQNLIKQNCELFE
+QLGEYKFQNALLVRYTKKVPQVSTPTLVEVSRNLGKVGSKCCKHPEAKRMPCAEDYLSVVLNQLCVLHEK
+TPVSDRVTKCCTESLVNRRPCFSALEVDETYVPKEFNAETFTFHADICTLSEKERQIKKQTALVELVKHK
+PKATKEQLKAVMDDFAAFVEKCCKADDKETCFAEEGKKLVAASQAALGL
+
+			</textarea>
+			<br>
+			<button id="btn1" class="btn btn-danger">Search CAPS</button>
+			<button id="btn2" class="btn btn-success">Clear</button>
+			
+		</div>
+		<div class="output_container bg-info">
+			<div id="output_txt"></div>
+			
+		</div>
+
+	
+	<div class ="information_container bg-light"> 
+	<hr style="width:200px;border:3px solid red" class="w3-round">
+		<p> CaPS (Calcium Pattern Search) identifies Ca(II)-binding motifs in proteins based on <a href="#tab" >unique patterns (or signatures) listed below</a>. These patterns (or signatures) can be used to identify canonical EF-hand and pseudo EF-hand. We expect to significantly expand this list in the future to include non-contiguous (binding motif includes AA residues distant from each other in the primary structure) patterns. To check a sequence for the presence of a Ca(II)-binding signature, please past the protein sequence in the <a href="#dnaseq">textarea</a> and then click <b>Search CAPS</b>.</p>
+	<div class="row" id="tab"><img class="col-sm-12" src="./eftable.png" alt="ef-hand" ></div>
+	<p><br>For more details, please read: </p>
+	<p> Zhou Y, Yang W, Kirberger M, Lee HW, Ayalasomayajula G, Yang JJ.
+		<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/prot.21139" target="_blank">Prediction of EF-hand calcium-binding proteins and analysis of bacterial EF-hand proteins.
+		<b>Proteins</b>. 2006 Nov 15;65(3):643-55.</a> </p>
+	<p>Zhou Y, <b>Xue S</b>, Yang JJ.
+		<a href="http://pubs.rsc.org/en/Content/ArticleLanding/2013/MT/C2MT20009K#!divAbstract" target="_blank">Calciomics: integrative studies of Ca2+-binding proteins and their interactomes in biological systems.
+		Metallomics. 2013 Jan;5(1):29-42. </a></p>
+	<p>Zhou Y, <b>Xue S</b>, Chen Y, Yang JJ.
+		<a href="https://link.springer.com/protocol/10.1007%2F978-1-62703-230-8_3" target="_blank">Probing Ca2+-binding capability of viral proteins with the EF-hand motif by grafting approach.
+		<b>Methods Mol Biol</b>. 2013;963:37-53</a></p>
+	<p>Y Chen, <b>S Xue</b>, Y Zhou, JJ Yang.
+		<a href="https://link.springer.com/article/10.1007/s11426-010-0011-5" target="_blank">Calciomics: prediction and analysis of EF-hand calcium binding proteins by protein engineering.
+		<b>Sci China Chem</b>. 2010 Jan 1;53(1):52-60.</a></p>
+	</div>
+	</div>
+	<div class = "foot" > 
+		<hr style="width:200px;border:3px solid red" class="w3-round">
+		<h6><i class="fa fa-cog fa-spin" ></i>    Developed by Shenghui Xue. Please contact me (shenghuixue@gmail.com) to report any problem about this page. Thank you. <br>
+		<a href="https://github.com/ShenghuiXue/simpleBioinformatics" ><i class="fab fa-github"> Fork me on GitHub </i><a>
+		</h6>
+		
+
+	</div>
+	<!-- end of w3-main -->
+	</div>
+	</div>
+</body>
+</html>
+
+<script>
+		var dnaseq="";
+		var option="";
+	$(document).ready(function(){
+		$("#btn2").click(function (){$("#dnaseq").val("")});
+		$("#btn1").click(function(){
+			dnaseq=$("#dnaseq").val();
+			if (dnaseq !=="") {
+				var inputSeq= new fastSeq ("Protein", dnaseq);
+				var output=inputSeq.predictEFhand();
+				$("#output_txt").html(output);
+			} else {
+				$("#output_txt").html("");
+			}
+			
+
+		});
+	});
+	</script>
+
+
+	<script>
+	// genarate a object called fastaSeq, input typeOfSeq = "DNA" "RNA" "Protein" 
+	// what fastaSeq object can do? 
+	// DNA to protein
+	// reverse complementary
+	// get all comments of fasta file as array
+	// get all sequence in the fasta files as array
+	// convert single str to double str for the output in html
+	function fastSeq (typeOfSeq, sequence) {
+		this.typeOfSeq=typeOfSeq; // can be DNA RNA PRPTEIN
+		this.sequence=sequence.trim();
+		this.sequenceArray=this.sequence.split(/(?=>)/g);
+		this.getSeqHeaderArray= function ()  {
+			var tempSeqHeaderArray=[];
+			for (var i=0; i<this.sequenceArray.length; i++) {
+				var temparray= this.sequenceArray[i].split(/\r?\n/);
+				if (temparray[0].indexOf(">")===0) {
+					// first line must be start with either > or empty
+					tempSeqHeaderArray.push(temparray[0].trim().substring(1));
+				} else {
+					tempSeqHeaderArray.push("unnamed_seq" + i+1);
+				}
+			}
+			
+			// if start from > treat this line of code as coments . 
+			// if the next line start with ; ignor this line; 
+			// if the next line is ; igore this line 
+			// if the next line start with char other than ; and > start read and store in as seq, remove all escape if 
+			// if the next char is * ; > finish this sequence reading
+			return tempSeqHeaderArray;
+		};
+		this.getSeqOnlyArray=function () {
+			var tempSeqrArray=[];
+			
+			for (var i=0; i<this.sequenceArray.length; i++) {
+				var temparray= this.sequenceArray[i].split(/\r?\n/);
+				var tempseq="";
+				// loop through each line of seq, if the sequence start with > after trim , treat as head
+				// if sequence start with ; after trim, treat as comments line
+				// else add the sequence to temseq, but remove all non alphabetic letters. replace(/[^A-Za-z]/g, "")
+				for (var j=0; j< temparray.length; j++) {
+					if (temparray[j].trim().indexOf(">")===0) {
+					// do nothing
+					} else if (temparray[j].trim().indexOf(";")===0){
+					//do nothing
+					} else {
+						var tempseqNoStar=temparray[j].split("*")[0];
+						tempseq=tempseq+tempseqNoStar.replace(/[^A-Za-z]/g, "");
+					}
+				}
+				//update tempSeqrArray
+				tempSeqrArray.push(tempseq);
+
+			}
+			return tempSeqrArray;
+		}
+		this.getFristSequence = function (){ 
+			return this.getSeqOnlyArray()[0];
+		}; 
+		this.getFirstHeader= function () {
+			return getSeqHeaderArray()[0];
+		}; // remove escape sequences
+		this.getReverseSeq=function(){
+		
+		}; // remove escape sequences
+		this.getSequenceByIndex =function(index) {
+			return this.getSeqOnlyArray()[index];
+		}
+		
+		this.getHeaderByIndex= function (index) {
+			return getSeqHeaderArray()[index];
+		};
+		
+		this.getComplementSeq=function(){
+			var ComplementSeqWithHeader = "";
+			var containingillegalLetter = false;
+			// loop through all the sequences, add comments >  comments  \n  add complement sequence case sensitive  \n 
+			// repeat untill all the sequence are completed
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				ComplementSeqWithHeader= ComplementSeqWithHeader+ "<p class='sequenceID'> "+this.getSeqHeaderArray()[i]+ "</p>";
+				// now deal with seq converstion
+				var tempseq = this.getSeqOnlyArray()[i];
+				var tempCompSeq="";
+				for (var j=0; j<tempseq.length;j++){
+					if (tempseq[j]==="A") {
+						tempCompSeq=tempCompSeq+"T";
+					} else if (tempseq[j]==="a") {
+						tempCompSeq=tempCompSeq+"t";
+					} else if (tempseq[j]==="T") {
+						tempCompSeq=tempCompSeq+"A";
+					} else if (tempseq[j]==="t") {
+						tempCompSeq=tempCompSeq+"a";
+					} else if (tempseq[j]==="C") {
+						tempCompSeq=tempCompSeq+"G";
+					} else if (tempseq[j]==="c") {
+						tempCompSeq=tempCompSeq+"g";
+					} else if (tempseq[j]==="G") {
+						tempCompSeq=tempCompSeq+"C";
+					} else if (tempseq[j]==="g") {
+						tempCompSeq=tempCompSeq+"c";
+					} else if (tempseq[j]==="U") {
+						tempCompSeq=tempCompSeq+"A";
+					} else if (tempseq[j]==="u") {
+						tempCompSeq=tempCompSeq+"a";
+					} else {
+						tempCompSeq=tempCompSeq+tempseq[j];
+						containingillegalLetter = true;
+					}				
+				}
+				
+				ComplementSeqWithHeader= ComplementSeqWithHeader +"<p class='resultseq'>"+tempCompSeq+"</p>";
+				if(containingillegalLetter) {alert ("The input sequence contains letters other than A T C G U, please check carefully!");}
+				
+			}
+			return ComplementSeqWithHeader;
+		
+		}; // remove escape sequences
+		
+		this.getReverseSeq=function(){
+			var ReverseSeqWithHeader = "";
+			// loop through all the sequences, add comments >  comments  \n  add complement sequence case sensitive  \n 
+			// repeat untill all the sequence are completed
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				ReverseSeqWithHeader= ReverseSeqWithHeader+ "<p class='sequenceID'> " + this.getSeqHeaderArray()[i]+ "</p>";
+				// now deal with seq converstion
+				var tempseq = this.getSeqOnlyArray()[i].split("").reverse().join("");
+				ReverseSeqWithHeader= ReverseSeqWithHeader+"<p class='resultseq'>"+tempseq+"</p>";
+			}
+			return ReverseSeqWithHeader;
+		}; // remove escape sequences
+		
+		this.getReverseComplementSeq=function(){
+			var reverseComplementSeqWithHeader = "";
+			var containingillegalLetter = false;
+			// loop through all the sequences, add comments >  comments  \n  add complement sequence case sensitive  \n 
+			// repeat untill all the sequence are completed
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				reverseComplementSeqWithHeader= reverseComplementSeqWithHeader+ "<p class='sequenceID'> " + this.getSeqHeaderArray()[i]+ "</p>";
+				// now deal with seq converstion
+				var tempseq = this.getSeqOnlyArray()[i];
+				var tempCompSeq="";
+				for (var j=0; j<tempseq.length;j++){
+					if (tempseq[j]==="A") {
+						tempCompSeq="T"+tempCompSeq;
+					} else if (tempseq[j]==="a") {
+						tempCompSeq="t"+tempCompSeq;
+					} else if (tempseq[j]==="T") {
+						tempCompSeq="A"+tempCompSeq;
+					} else if (tempseq[j]==="t") {
+						tempCompSeq="a"+tempCompSeq;
+					} else if (tempseq[j]==="C") {
+						tempCompSeq="G"+tempCompSeq;
+					} else if (tempseq[j]==="c") {
+						tempCompSeq="g"+tempCompSeq;
+					} else if (tempseq[j]==="G") {
+						tempCompSeq="C"+tempCompSeq;
+					} else if (tempseq[j]==="g") {
+						tempCompSeq="c"+tempCompSeq;
+					} else if (tempseq[j]==="U") {
+						tempCompSeq="A"+tempCompSeq;
+					} else if (tempseq[j]==="u") {
+						tempCompSeq="a"+tempCompSeq;
+					} else {
+						tempCompSeq=tempseq[j]+tempCompSeq;
+						containingillegalLetter = true;
+					}				
+				}
+				reverseComplementSeqWithHeader= reverseComplementSeqWithHeader+"<p class='resultseq'>"+tempCompSeq+"</p>";
+				if (containingillegalLetter) {alert ("The input sequence contains letters other than A T C G U, please check carefully!");}
+				
+				
+			}
+			return reverseComplementSeqWithHeader;
+		
+		
+		}; // remove escape sequences
+		this.translateAllDNASeq=function(){
+			// return string to desplay each sequence name, followed by six transaltion
+			var translatedSeq="";
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				var forwarddSeq= this.getSeqOnlyArray()[i].replace(/[^A-Za-z]/g, "");
+				translatedSeq=translatedSeq+"<div class='single_seq'>"+"<p class = 'sequenceID'>"+this.getSeqHeaderArray()[i]+"</p>";
+				translatedSeq=translatedSeq+"<p class = 'frameID'> 5' to 3' Frame 1  </p> <p>" + DNAToProteinSeq (0, forwarddSeq)+"</p>";
+				translatedSeq=translatedSeq+"<p class = 'frameID'> 5' to 3' Frame 2  </p> <p>" + DNAToProteinSeq (1, forwarddSeq)+"</p>";
+				translatedSeq=translatedSeq+"<p class = 'frameID'> 5' to 3' Frame 3  </p> <p>" + DNAToProteinSeq (2, forwarddSeq)+"</p>";
+				var reverseSeq= this.getSeqOnlyArray()[i].replace(/[^A-Za-z]/g, "").split("").reverse().join("");
+				translatedSeq=translatedSeq+"<p class = 'frameID'> 3' to 5' Frame 1  </p> <p>" + DNAToProteinSeq (0, reverseSeq)+"</p>";
+				translatedSeq=translatedSeq+"<p class = 'frameID'> 3' to 5' Frame 2  </p> <p>" + DNAToProteinSeq (1, reverseSeq)+"</p>";
+				translatedSeq=translatedSeq+"<p class = 'frameID'> 3' to 5' Frame 3  </p> <p>" + DNAToProteinSeq (2, reverseSeq)+"</p><br></div>";
+			} // remove escape sequences only works on the first input sequence
+			return translatedSeq;
+		} 
+
+		this.toDoubleStrand= function (numOfDNAInOneLine) { // numOfDNAInOneLine remcommend to be 60 or 120
+			var tempString = "";
+			// format to display
+			// <div class='single_seq'> <p></p>
+			// <p><span>5' -> 3' </span> <div class='index_number'> index </div> <span class = 'sequence'> 60 seq </span></p>
+			// <p><span>3' -> 5' </span> <div class='index_number'> index </div> <span class = 'sequence'> 60 seq </span></p>
+			// repeat until finish
+			// </div>
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				var headSeq=this.getSeqHeaderArray()[i]; // head
+				var tempseq= this.getSeqOnlyArray()[i].replace(/[^A-Za-z]/g, ""); // forward seq
+				var tempCompSeq="";  // reverse seq
+				for (var j=0; j<tempseq.length;j++){
+					if (tempseq[j]==="A") {
+						tempCompSeq+="T";
+					} else if (tempseq[j]==="a") {
+						tempCompSeq+="t";
+					} else if (tempseq[j]==="T") {
+						tempCompSeq+="A";
+					} else if (tempseq[j]==="t") {
+						tempCompSeq+="a";
+					} else if (tempseq[j]==="C") {
+						tempCompSeq+="G";
+					} else if (tempseq[j]==="c") {
+						tempCompSeq+="g";
+					} else if (tempseq[j]==="G") {
+						tempCompSeq+="C";
+					} else if (tempseq[j]==="g") {
+						tempCompSeq+="c";
+					} else if (tempseq[j]==="U") {
+						tempCompSeq+="A";
+					} else if (tempseq[j]==="u") {
+						tempCompSeq+="a";
+					} else {
+						tempCompSeq+=tempseq[j];
+						
+					}				
+				}
+				// next step is to desplay these sequences
+				tempString += "<div class='single_seq'> <p class = 'sequenceID'> "+ headSeq +"</p>";
+				for (var p =0; p<tempseq.length;p=p+numOfDNAInOneLine) {
+					// display every xx bp as a line for forward seq
+					var shortseq = tempseq.substring(p,p+numOfDNAInOneLine);
+					tempString += "<p><span class='seq_ID'>5'->3' </span> <span class='index_number'>" + (p+1)+ "</span> <span class = 'sequence'>";
+					// for loop to add space in every 10 seq 
+
+					for (var k = 0; k<shortseq.length; k=k+10) {
+						tempString += shortseq.substring(k,k+10)+ " ";
+					}
+
+					tempString +="</span><span>" + (p+shortseq.length)+ "</span></p>";
+
+					// display every xx bp as a line for reverse seq
+					var shortseq = tempCompSeq.substring(p,p+numOfDNAInOneLine);
+					tempString += "<p class='seq_IDrev' style='line-height: 70%;'><span class='seq_ID'>3'->5' </span> <span class='index_number'>" + (p+1)+ "</span> <span class = 'sequence'>";
+					for (var k = 0; k<shortseq.length; k=k+10) {
+						tempString += shortseq.substring(k,k+10)+ " ";
+					}
+
+					tempString +="</span><span>" + (p+shortseq.length)+ "</span></p><br>";
+				}
+				tempString +="</div>";
+
+
+			}
+			return tempString;
+		}
+
+		this.predictEFhand= function () {
+			
+			// object to save al the names and patterns for EF-hand (CAPS)
+			var capsPattern = {
+				eloopf: "x-{DNQ}-x(2)-{GP}-{ENPQS}-x(2)-{DPQR}-[DNS]-x-[DNS]-{FLIVWY}-[DNESTG]-[DNQGHRK]-{GP}-[LIVMC]-[DENQSTAGC]-x(2)-[ED]-[FLYMVIW]-x(2)-{NPS}-{DENQ}-x(3)",
+				eloop: "x-{DNQ}-x(2)-{GP}-{ENPQS}-x(2)-{DPQR}-[DNS]-x-[DNS]-{FLIVWY}-[DNESTG]-[DNQGHRK]-{GP}-[LIVMC]-[DENQSTAGC]-x(2)-[ED]",
+				loopf: "[DNS]-x-[DNS]-{FLIVWY}-[DNESTG]-[DNQGHRK]-{GP}-[LIVMC]-[DENQSTAGC]-x(2)-[ED]-[FLYMVIW]-x(2)-{NPS}-{DENQ}-x(3)",
+				loop: "[DNS]-x-[DNS]-{FLIVWY}-[DNESTG]-[DNQGHRK]-{GP}-[LIVMC]-[DENQSTAGC]-x(2)-[ED]",
+				SP00018: "D-x-[DNS]-{ILVFYW}-[DENSTG]-[DNQGHRK]-{GP}-[LIVMC]-[DENQSTAGC]-x(2)-[DE]-[LIVMFYW]",
+				PC: "[LMVITNF]-[FY]-x(2)-[YHIVF]-[SAITV]-x(5,9)-[LIVM]-x(3)-[EDS]-[LFM]-[KRQLE]-x(20,28)-[LQKF]-[DNG]-x-[DNSC]-x-[DNK]-x(4)-[FY]-x-[EKS]",
+				Pseudo:"[LMVITNF]-[FY]-x(2)-[YHIVF]-[SAITV]-x(5,9)-[LIVM]-x(3)-[EDS]-[LFM]-[KRQLE]",
+				PS00303:"[LIVMFYW](2)-x(2)-[LK]-Dx(3)-[DN]-x(3)-[DNSG]-[FY]-x-[ES]-[FYVC]-x(2)-[LIVMFS]-[LIVMF]",
+				Excalibur: "D-x-D-x-D-G-x(2)-C-E",
+				EF_hand_like:"D-x-[DNS]-{ILVFYW}-[DEN]-G-{GP}-x(5, 6)-[DE]"	
+			}
+			//alert ("Test1");
+			// get seq and seq header , loop through one by one, 
+			// for each seq, loop through each pattern 
+			// if there is pattern, show pattern name, high light all the sequences with yellow background
+			// if there is no such pattern go to next
+			// output # sequence ID ## summary table  ### each individule pattern # another sequence id
+			// table format: pattern name, mathch sequence, matching starting position 
+			// if no pattern detected, return this sequence contains 0 predicted calcium binding sites by CAPS pattern search.
+			var overallMatch=0; // check if all the seq has at least 1 match
+			var overallOutPut="";
+			//alert ("Test2");
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				
+				var seq = this.getSeqOnlyArray()[i];
+				var header = this.getSeqHeaderArray()[i];
+				var isMatch=0; // this var keep tracking if the sequence contains predicted sites
+				var tableRepo="<table class='col-md-12'><tr><th>Pattern ID</th> <th>Matched Sequences</th> <th>Start Position</th> </tr>";;
+				var demoRepo="";
+				for (var patternID in capsPattern) {
+					//alert ("Test4");
+					var Pattern=capsPattern[patternID];
+					//alert ("Test6");
+					var regularExTemp=toRegex(Pattern);
+					//alert (regularExTemp);
+				
+					if (isMatchFn(seq,regularExTemp)===true) { // if contains such pattern
+						isMatch=1;// mark this sequence contains pattern
+						overallMatch=1;// check if all the seq has at least 1 match
+						var markedTempSeq=markMatchedSeq(seq,regularExTemp);//mark matched sequences in the string
+						demoRepo += "<p class = 'patternID'>"+ patternID + "</p> <p class = 'markedTempSeq'>" + markedTempSeq + "</p>";
+						tableRepo += "<tr><td>"+ patternID + "</td><td>"+getMatchSequence(seq,regularExTemp)+"</td><td>"+getMatchIndex(seq,regularExTemp) +"</td></tr>";
+						//alert (getMatchSequence(seq,regularExTemp)+ "   "+ getMatchIndex(seq,regularExTemp));
+						
+					}	
+				}
+				if (isMatch !==0 ) {
+					overallOutPut += "<p class = 'sequenceID'>"	+ header +"</p>" + tableRepo +"</table><br>" + demoRepo;
+				} else {
+					overallOutPut += "<p class = 'sequenceID'>"	+ header +"</p>" + "</table><p>This sequence (" +header + ") mathch 0 patterns.</p>";
+				}
+			}
+			if (overallMatch !==0) {
+				return overallOutPut;
+			} else {
+				return "These sequences contain 0 patterns.";
+			}
+			
+		}
+		
+		this.predictGivenPattern= function (capsPatternJson) {
+			
+			// object to save al the names and patterns for EF-hand (CAPS)
+			var capsPattern = capsPatternJson;
+			
+			//alert ("Test1");
+			// get seq and seq header , loop through one by one, 
+			// for each seq, loop through each pattern 
+			// if there is pattern, show pattern name, high light all the sequences with yellow background
+			// if there is no such pattern go to next
+			// output # sequence ID ## summary table  ### each individule pattern # another sequence id
+			// table format: pattern name, mathch sequence, matching starting position 
+			// if no pattern detected, return this sequence contains 0 predicted calcium binding sites by CAPS pattern search.
+			var overallMatch=0; // check if all the seq has at least 1 match
+			var overallOutPut="";
+			//alert ("Test2");
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				
+				var seq = this.getSeqOnlyArray()[i];
+				var header = this.getSeqHeaderArray()[i];
+				var isMatch=0; // this var keep tracking if the sequence contains predicted sites
+				var tableRepo="<table><tr><th>Pattern ID</th> <th>Matched Sequences</th> <th>Start Position</th> </tr>";;
+				var demoRepo="";
+				for (var patternID in capsPattern) {
+					//alert ("Test4");
+					var Pattern=capsPattern[patternID];
+					//alert ("Test6");
+					var regularExTemp=toRegex(Pattern);
+					//alert (regularExTemp);
+				
+					if (isMatchFn(seq,regularExTemp)===true) { // if contains such pattern
+						isMatch=1;// mark this sequence contains pattern
+						overallMatch=1;// check if all the seq has at least 1 match
+						var markedTempSeq=markMatchedSeq(seq,regularExTemp);//mark matched sequences in the string
+						demoRepo += "<p class = 'patternID'>"+ patternID + "</p> <p class = 'markedTempSeq'>" + markedTempSeq + "</p>";
+						tableRepo += "<tr><td>"+ patternID + "</td><td>"+getMatchSequence(seq,regularExTemp)+"</td><td>"+getMatchIndex(seq,regularExTemp) +"</td></tr>";
+						//alert (getMatchSequence(seq,regularExTemp)+ "   "+ getMatchIndex(seq,regularExTemp));
+						
+					}	
+				}
+				if (isMatch !==0 ) {
+					overallOutPut += "<p class = 'sequenceID'>"	+ header +"</p>" + tableRepo +"</table><br>" + demoRepo;
+				} else {
+					overallOutPut += "<p class = 'sequenceID'>"	+ header +"</p>" + "</table><p>This sequence (" +header + ") mathch 0 patterns.</p>";
+				}
+			}
+			if (overallMatch !==0) {
+				return overallOutPut;
+			} else {
+				return "These sequences contain 0 patterns.";
+			}
+			
+		}
+
+		this.getTM = function () {
+			// get sequence array
+			// count number of A T C G 
+			// return TM by equation tm = 2*A T + 4 * C G
+			// this is the header line for the output table
+			var outputTable="<table> <tr><th>Sequence ID</th> <th>Tm (°C)</th> <th> Number of Nucleotides</th> <th> ssDNA M.W. (g/mol)</th> <tr>"
+			var tmTemp="";
+			var mw="";
+			for (var i = 0; i<this.getSeqOnlyArray().length;i++) {
+				outputTable=outputTable+"<td>"+ this.getSeqHeaderArray()[i].substr(0,20) +"</td>";
+				var tempSeq=this.getSeqOnlyArray()[i];
+				var matchesAT = tempSeq.match(/[AT]/ig);
+				var countAT = matchesAT ? matchesAT.length : 0;
+				var matchesCG = tempSeq.match(/[CG]/ig);
+				var countCG = matchesCG ? matchesCG.length : 0;
+				tmTemp=2*countAT+4*countCG;
+
+				var matchesA = tempSeq.match(/[A]/ig);
+				var countA = matchesA ? matchesA.length : 0;
+				var matchesT = tempSeq.match(/[T]/ig);
+				var countT = matchesT ? matchesT.length : 0;
+				var matchesC = tempSeq.match(/[C]/ig);
+				var countC = matchesC ? matchesC.length : 0;
+				var matchesG = tempSeq.match(/[G]/ig);
+				var countG = matchesG ? matchesG.length : 0;
+				var mw=(countA*313.2)+(countT*304.2)+(countC*289.2)+(countG*329.2)+79.0;
+				//M.W. = (An x 313.2) + (Tn x 304.2) + (Cn x 289.2) + (Gn x 329.2) + 79.0ª
+				outputTable=outputTable+"<td>"+ tmTemp +"</td><td>"+tempSeq.length+"</td><td>"+mw+"</td></tr>";
+			}
+			outputTable=outputTable+"</table>";
+			return outputTable;
+		}
+		
+		this.getScrambledseq=function(){
+			var scrambledStr = "";
+			// loop through all the sequences, add comments >  comments  \n  add complement sequence case sensitive  \n 
+			// repeat untill all the sequence are completed
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				scrambledStr= scrambledStr+ "<p class='sequenceID'> " + this.getSeqHeaderArray()[i]+ "</p>";
+				// now deal with seq converstion
+				var tempseq = this.getSeqOnlyArray()[i].shuffle();
+				scrambledStr= scrambledStr+"<p class='resultseq'>"+tempseq+"</p>";
+			}
+			return scrambledStr;
+		}; // remove escape sequences
+		
+		this.getRestrictionSite= function (enzymePatternJSONFile) {
+			
+			// JSON file with the following information 
+			// {name: "Acc65I", site: "(10/12)CGANNNNNNTGC(12/10)", sequence: "CGANNNNNNTGC", regexSeq: "CGA......TGC"}
+			var enzymePatternJson = enzymePatternJSONFile;
+			
+			//alert ("Test1");
+			// get seq and seq header , loop through one by one, 
+			// for each seq, loop through each pattern 
+			// if there is pattern, show pattern name, high light all the sequences with yellow background
+			// if there is no such pattern go to next
+			// output # sequence ID ## summary table  ### each individule pattern # another sequence id
+			// table format: pattern name, mathch sequence, matching starting position 
+			// if no pattern detected, return this sequence contains 0 predicted calcium binding sites by CAPS pattern search.
+			var overallMatch=0; // check if all the seq has at least 1 match
+			var overallOutPut="";
+			//alert ("Test2");
+			for (var i=0; i<this.getSeqOnlyArray().length;i++) {
+				
+				var seq = this.getSeqOnlyArray()[i];
+				var header = this.getSeqHeaderArray()[i];
+				var isMatch=0; // this var keep tracking if the sequence contains predicted sites
+				var tableRepo="<table><tr><th>Enzyme</th> <th>Matched Sequences</th> <th>Start Position</th> <th>Cleavage Site</th>  </tr>";;
+				var demoRepo="";
+				for (var j =0; j< enzymePatternJson.length; j++) {
+					//alert ("Test4");
+					var Pattern=enzymePatternJson[j].regexSeq;
+					//alert (Pattern);
+					var regularExTemp=toRegex(Pattern);
+					//alert (regularExTemp);
+					var patternID = enzymePatternJson[j].name;
+					//alert (isMatchFn(seq,regularExTemp)+ "   " +patternID+ " " + regularExTemp + " " + seq)
+					if (isMatchFn(seq,regularExTemp)===true) { // if contains such pattern
+						isMatch=1;// mark this sequence contains pattern
+						overallMatch=1;// check if all the seq has at least 1 match
+						var markedTempSeq=markMatchedSeq(seq,regularExTemp);//mark matched sequences in the string
+						demoRepo += "<p class = 'patternID'>"+ enzymePatternJson[j].name + "</p> <p class = 'markedTempSeq'>" + markedTempSeq + "</p>";
+						tableRepo += "<tr><td>"+ enzymePatternJson[j].name + "</td><td>"+getMatchSequence(seq,regularExTemp)+"</td><td>"+getMatchIndex(seq,regularExTemp) +"</td><td>"+enzymePatternJson[j].site + "</td></tr>";
+						//alert (getMatchSequence(seq,regularExTemp)+ "   "+ getMatchIndex(seq,regularExTemp));
+						
+					}	
+				}
+				if (isMatch !==0 ) {
+					overallOutPut += "<p class = 'sequenceID'>"	+ header +"</p>" + tableRepo +"</table><br>" + demoRepo;
+				} else {
+					overallOutPut += "<p class = 'sequenceID'>"	+ header +"</p>" + "</table><p>This sequence (" +header + ") mathch 0 patterns.</p>";
+				}
+			}
+			if (overallMatch !==0) {
+				return overallOutPut;
+			} else {
+				return "These sequences contain 0 patterns.";
+			}
+			
+		} 
+
+		this.getCripr= function () {
+			// get core sequence
+			var coreSeq=this.sequence;
+			// covert to reverse sequence 
+			var revCoreSeq=""
+			var illegalCharNum=0;
+			for (var j=0; j<coreSeq.length;j++){
+					if (coreSeq[j]==="A") {
+						revCoreSeq+="T";
+					} else if (coreSeq[j]==="a") {
+						revCoreSeq+="t";
+					} else if (coreSeq[j]==="T") {
+						revCoreSeq+="A";
+					} else if (coreSeq[j]==="t") {
+						revCoreSeq+="a";
+					} else if (coreSeq[j]==="C") {
+						revCoreSeq+="G";
+					} else if (coreSeq[j]==="c") {
+						revCoreSeq+="g";
+					} else if (coreSeq[j]==="G") {
+						revCoreSeq+="C";
+					} else if (coreSeq[j]==="g") {
+						revCoreSeq+="c";
+					} else if (coreSeq[j]==="U") {
+						revCoreSeq+="A";
+					} else if (coreSeq[j]==="u") {
+						revCoreSeq+="a";
+					} else {
+						revCoreSeq+=coreSeq[j];
+						illegalCharNum++;
+					}				
+			}	
+			if (illegalCharNum !==0) {alert ("The input sequence contains letters other than A,T, C, G. <br> Please check it carefully!");}
+			if (coreSeq.length !==20) {alert ("The input squence contains " + coreSeq.length + " nt! <br> Please check it carefully!");}
+			// output sequence in certain format 
+			var output="<p style = 'font-family: monospace;'> 5'- CACCG<span class='blue'>" + coreSeq + "</span>____ -3' <br>3'- ____C<span class = 'blue'>" + revCoreSeq + "</span>CAAA -5'</p>";
+			return output;
+
+			/*
+			5'- CACCG 20nt -3'
+			3'      C 20nt CAAA -5'
+
+			-------how to do it:
+			check if the length is 20 nt -> warning longer than 20nt 
+			check the seq only contains atcg -> warning contains atcg
+			5' + " CACCG" + seq + "-3'"
+			3' + "     C" +  revesed seq + CAAA + "-5'" 
+			*/
+
+		}
+	}
+
+
+
+	// a function to covert DNA sequence to protein sequence, starting from index
+		function DNAToProteinSeq (index, DNAseq) {
+			// in javascript index can be larger than the length of DNAseq, generating an empty str
+			var workingSeq = DNAseq.toUpperCase().replace(/[^A-Z]/g, "");
+			//loop through the sring and convert every 3 dna to protein
+			var proteinSeq = "<p>";
+			var DNACodon = {
+				GCT:"A", GCC:"A", GCA:"A", GCG:"A", GCN:"A",
+				CGT:"R", CGC:"R", CGA:"R", CGG:"R", AGA:"R", AGG:"R",CGN:"R", MGR:"R",
+				AAT:"N", AAC:"N", AAY:"N",
+				GAT:"D", GAC:"D",GAY:"D",
+				TGT:"C", TGC:"C",TGY:"C",
+				CAA:"Q", CAG:"Q",CAR:"Q",
+				GAA:"E", GAG:"E", GAR:"E",
+				GGT:"G", GGC:"G", GGA:"G", GGG:"G",GGN:"G",
+				CAT:"H", CAC:"H",CAY:"H",
+				ATT:"I", ATC:"I", ATA:"I",ATH:"I",
+				ATG:"<span class='Matg'>M</span>",
+				TTA:"L", TTG:"L", CTT:"L", CTC:"L", CTA:"L", CTG:"L",YTR:"L", CTN:"L",
+				AAA:"K", AAG:"K",AAR:"K",
+				TTT:"F", TTC:"F",TTY:"F",
+				CCT:"P", CCC:"P", CCA:"P", CCG:"P", CCN:"P",
+				TCT:"S", TCC:"S", TCA:"S", TCG:"S", AGT:"S", AGC:"S", TCN:"S", AGY:"S",
+				ACT:"T", ACC:"T", ACA:"T", ACG:"T",ACN:"T",
+				TGG:"W",
+				TAT:"Y", TAC:"Y", TAY:"Y",
+				GTT:"V", GTC:"V", GTA:"V", GTG:"V",GTN:"V",
+				TAA:"<span class='terminationCodon'>*</span>", TGA:"<span class='terminationCodon'>*</span>", 
+				TAG:"<span class='terminationCodon'>*</span>",TAR:"<span class='terminationCodon'>*</span>", 
+				TRA:"<span class='terminationCodon'>*</span>"
+			}
+			for (var i = index; i<workingSeq.length;i=i+3) {
+				var AA = "";
+				var threeDNACodon= workingSeq.substring(i,i+3); // extract 3 DNA seq and then convert it to amino acid
+				
+					proteinSeq = proteinSeq +DNACodon[threeDNACodon] ; 
+				
+			}
+			return  proteinSeq.split("undefined").join("X")+"</p>";
+		}
+
+		//
+		
+	// a function to covert prosite pattern to javescript regular expression 
+	//remove all - outside of []
+
+	//replace x -x x- with [\w]
+	// replace { with [^
+	// replace } with ]
+	// deal with (2)
+	// add \ \i
+
+	function StrToRegex (String) {
+		var tempStr= String.replace(/\s/g,"").replace(/-/g,"").replace(/x/gi, "\\w").replace(/{/g, "[^").replace(/}/g, "]").replace(/\(/g, "{").replace(/\)/g, "}").replace(/</g, "^").replace(/>/g, "$");
+	// not supporting this format: [G>]
+		return tempStr;
+	}
+
+
+
+	// a helper function to conert regular string to regular expression , case insensitive and global
+	toRegex = function(String) {
+		return new RegExp("\("+StrToRegex(String)+"\)", "gi");
+	}
+	// a helper function to modify all the matched the sequence 
+	markMatchedSeq = function (String, regex) {
+		return String.replace(regex, "<span class = 'matchedSeq'>$1</span>")
+	}
+	// a help function to test if a give string contain the regex match
+	isMatchFn = function (String, regex) {
+		return regex.test(String);
+	}
+	// a help function to return the index of all matches:
+	getMatchIndex=function(String, regex) {
+		var indices="";
+		while ((match = regex.exec(String)) != null) {
+		 indices+= (match.index+1)+ ", ";
+		}
+		return indices.slice(0,-2);
+	}
+
+	getMatchSequence = function (String, regex){
+		return String.match(regex).toString().replace(/,/g, ", ");
+	}
+
+	String.prototype.shuffle = function () {
+		var a = this.split(""),
+			n = a.length;
+
+		for(var i = n - 1; i > 0; i--) {
+			var j = Math.floor(Math.random() * (i + 1));
+			var tmp = a[i];
+			a[i] = a[j];
+			a[j] = tmp;
+		}
+		return a.join("");
+	}
+
+</script>
