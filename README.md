@@ -1,2 +1,3 @@
 # CAPS
-Host calcium pattern search website in Gitbu.io
+Host calcium pattern search (CAPS) website in Gitbu.io. 
+CAPS site is published at https://shenghuixue.github.io/CAPS/
