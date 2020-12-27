@@ -214,15 +214,17 @@ PKATKEQLKAVMDDFAAFVEKCCKADDKETCFAEEGKKLVAASQAALGL
 		$("#btn2").click(function (){$("#dnaseq").val("")});
 		$("#btn1").click(function(){
 			dnaseq=$("#dnaseq").val();
-			if (dnaseq !=="") {
+			if (dnaseq !== "") {
 				var inputSeq= new fastSeq ("Protein", dnaseq);
 				var output=inputSeq.predictEFhand();
 				$("#output_txt").html(output);
+				$.post( "https://usage-checker.herokuapp.com/stats", { serviceName: "simple_bioinformatics", methodName: "CAPS" })
+					  .done(function( data ) {
+						    console.log( data );
+					  });
 			} else {
 				$("#output_txt").html("");
-			}
-			
-
+			}	
 		});
 	});
 	</script>
